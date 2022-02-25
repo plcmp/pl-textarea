@@ -12,12 +12,42 @@ class PlTextArea extends PlElement {
             placeholder: { type: String, value: '' },
             required: { type: Boolean },
             invalid: { type: Boolean },
-            disabled: { type: Boolean, reflectToAttribute: true }
+            disabled: { type: Boolean, reflectToAttribute: true },
+            fit: { type: Boolean, value: false, reflectToAttribute: true },
+            grow: { type: Boolean, value: false },
+            hideResizer: { type: Boolean, value: false, reflectToAttribute: true}
         };
     }
 
     static get css() {
         return css`
+            :host([fit]) {
+                width: 100%;
+                height: 100%;
+            }
+
+            :host([fit]) pl-labeled-container {
+                width: 100%;
+                height: 100%;
+            }
+
+            :host([fit])  {
+                --content-width: 100%;
+                --content-height: 100%;
+
+                --textarea-content-width: 100%;
+                --textarea-content-height: 100%;
+            }
+
+            :host([fit]) .input-container{
+                width: 100%;
+                height: 100%;
+            }
+
+            :host([hide-resizer]) textarea {
+                resize: none;
+            }
+
             :host([disabled]) {
                 color: var(--grey-base);
                 cursor: not-allowed;
@@ -54,19 +84,19 @@ class PlTextArea extends PlElement {
                 outline:none;
 				padding: 8px 0 0 12px;
                 font-size: 14px;
-				width: var(--content-width, 200px);
-				height: 80px;
+				width: var(--textarea-content-width, 200px);
+				height: var(--textarea-content-height, 80px);
                 box-sizing: border-box;
                 font: var(--font-md);
                 border: 1px solid var(--grey-light);
 				border-radius: 4px;
-                z-index: 1;
                 min-height: 48px;
+                min-width: 300px;
 			}
+
 
 			.input-container {
                 display: flex;
-                width: var(--content-width, 200px);
                 flex-direction: row;
                 box-sizing: border-box;
 				overflow: hidden;
@@ -121,7 +151,6 @@ class PlTextArea extends PlElement {
         super.connectedCallback();
         this._nativeTextArea = this.root.querySelector('textarea');
         this._inputContainer = this.root.querySelector('.input-container');
-
         this.validate();
     }
 
