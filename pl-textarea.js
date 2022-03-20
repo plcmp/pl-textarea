@@ -78,7 +78,7 @@ class PlTextArea extends PlElement {
 			}
 
 			textarea {
-				background: var(--surface-color);
+				background: var(--background-color);
                 outline:none;
 				padding: var(--space-sm) 0 0 var(--space-md);
 				width: var(--textarea-content-width, 200px);
