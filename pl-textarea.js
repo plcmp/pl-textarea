@@ -78,22 +78,19 @@ class PlTextArea extends PlElement {
 			}
 
 			textarea {
-				background: inherit;
-				color: inherit;
-				border: none;
+				background: var(--surface-color);
                 outline:none;
-				padding: 8px 0 0 12px;
-                font-size: 14px;
+				padding: var(--space-sm) 0 0 var(--space-md);
 				width: var(--textarea-content-width, 200px);
 				height: var(--textarea-content-height, 80px);
                 box-sizing: border-box;
-                font: var(--font-md);
+                font: var(--text-font);
+                color: var(--text-color);
                 border: 1px solid var(--grey-light);
 				border-radius: 4px;
                 min-height: 48px;
-                min-width: 300px;
+                min-width: var(--content-width);
 			}
-
 
 			.input-container {
                 display: flex;
@@ -103,7 +100,7 @@ class PlTextArea extends PlElement {
                 position: relative;
                 box-sizing: border-box;
                 border: none;
-                border-radius: 4px;
+                border-radius: var(--border-radius);
 			}
 
             .input-container::before {
@@ -116,10 +113,10 @@ class PlTextArea extends PlElement {
             }
 
             .input-container.required::before {
-                border-top: 8px solid var(--attention-light);
-                border-left: 8px  solid var(--attention-light);
-                border-bottom: 8px solid transparent;
-                border-right: 8px solid transparent;
+				border-top: calc(var(--space-md) / 2) solid var(--attention);
+				border-left: calc(var(--space-md) / 2)  solid var(--attention);
+				border-bottom: calc(var(--space-md) / 2) solid transparent;
+				border-right: calc(var(--space-md) / 2) solid transparent;
             }
 
 			::placeholder {
