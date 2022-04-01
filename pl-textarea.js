@@ -14,6 +14,7 @@ class PlTextArea extends PlElement {
             invalid: { type: Boolean },
             disabled: { type: Boolean, reflectToAttribute: true },
             fit: { type: Boolean, value: false, reflectToAttribute: true },
+            stretch: { type: Boolean, value: false, reflectToAttribute: true },
             grow: { type: Boolean, value: false },
             hideResizer: { type: Boolean, value: false, reflectToAttribute: true}
         };
@@ -21,14 +22,26 @@ class PlTextArea extends PlElement {
 
     static get css() {
         return css`
+            :host {
+                display: flex;
+                outline: none;
+                width: var(--content-width);
+            }
+
+            pl-labeled-container {
+                width: inherit;
+                height: inherit;
+                position: relative;
+            }
+
             :host([fit]) {
                 width: 100%;
                 height: 100%;
             }
 
-            :host([fit]) pl-labeled-container {
-                width: 100%;
-                height: 100%;
+            :host([stretch]) {
+                --content-width: 100%;
+                --textarea-content-width: 100%;
             }
 
             :host([fit])  {
@@ -37,11 +50,6 @@ class PlTextArea extends PlElement {
 
                 --textarea-content-width: 100%;
                 --textarea-content-height: 100%;
-            }
-
-            :host([fit]) .input-container{
-                width: 100%;
-                height: 100%;
             }
 
             :host([hide-resizer]) textarea {
@@ -101,6 +109,8 @@ class PlTextArea extends PlElement {
                 box-sizing: border-box;
                 border: none;
                 border-radius: var(--border-radius);
+                width: 100%;
+                height: 100%;
 			}
 
             .input-container::before {
