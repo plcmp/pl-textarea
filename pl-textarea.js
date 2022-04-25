@@ -69,24 +69,23 @@ class PlTextArea extends PlElement {
                 background: var(--grey-lightest);
             }
 
-            :host(:hover) .input-container textarea{
+            :host(:hover) .input-container{
                 border: 1px solid var(--grey-dark);
 			}
 
-            :host(:active) .input-container textarea{
+            :host(:active) .input-container{
                 border: 1px solid var(--primary-base);
 			}
 
-			.input-container:focus-within textarea{
+			.input-container:focus-within{
                 border: 1px solid var(--primary-base) !important;
 			}
 
-			:host([invalid]) .input-container textarea{
+			:host([invalid]) .input-container{
 				border: 1px solid var(--negative-base) !important;
 			}
 
 			textarea {
-				background: var(--background-color);
                 outline:none;
 				padding: var(--space-sm) 0 0 var(--space-md);
 				width: var(--textarea-content-width, 200px);
@@ -94,8 +93,7 @@ class PlTextArea extends PlElement {
                 box-sizing: border-box;
                 font: var(--text-font);
                 color: var(--text-color);
-                border: 1px solid var(--grey-light);
-				border-radius: 4px;
+                border: none;
                 min-height: 48px;
                 min-width: var(--content-width);
 			}
@@ -111,6 +109,10 @@ class PlTextArea extends PlElement {
                 border-radius: var(--border-radius);
                 width: 100%;
                 height: 100%;
+                border: 1px solid var(--grey-light);
+				border-radius: 4px;
+                padding: 0 var(--space-sm);
+                background: var(--background-color);
 			}
 
             .input-container::before {
@@ -118,15 +120,15 @@ class PlTextArea extends PlElement {
                 display: block;
                 position: absolute;
                 box-sizing: border-box;
-                top: 0;
-                left: 0;
+                inset-block-start: 0;
+                inset-inline-start: 0;
             }
 
             .input-container.required::before {
-				border-top: calc(var(--space-md) / 2) solid var(--attention);
-				border-left: calc(var(--space-md) / 2)  solid var(--attention);
-				border-bottom: calc(var(--space-md) / 2) solid transparent;
-				border-right: calc(var(--space-md) / 2) solid transparent;
+				border-block-start: calc(var(--space-md) / 2) solid var(--attention);
+				border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
+				border-inline-end: calc(var(--space-md) / 2) solid transparent;
+				border-block-end: calc(var(--space-md) / 2) solid transparent;
             }
 
 			::placeholder {
