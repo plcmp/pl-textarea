@@ -9,6 +9,7 @@ class PlTextArea extends PlElement {
             label: { type: String },
             variant: { type: String },
             value: { type: String, value: '', observer: '_valueObserver' },
+            title: { type: String },
             placeholder: { type: String, value: '' },
             required: { type: Boolean },
             invalid: { type: Boolean },
@@ -16,7 +17,7 @@ class PlTextArea extends PlElement {
             fit: { type: Boolean, value: false, reflectToAttribute: true },
             stretch: { type: Boolean, value: false, reflectToAttribute: true },
             grow: { type: Boolean, value: false },
-            hideResizer: { type: Boolean, value: false, reflectToAttribute: true}
+            hideResizer: { type: Boolean, value: false, reflectToAttribute: true }
         };
     }
 
@@ -87,7 +88,10 @@ class PlTextArea extends PlElement {
 
 			textarea {
                 outline:none;
-				padding: var(--space-sm) 0 0 var(--space-md);
+                padding-block-start: var(--space-xs);
+                padding-inline-end: var(--space-sm);
+                padding-block-end: 0;
+                padding-inline-start: var(--space-sm);
 				width: var(--textarea-content-width, 200px);
 				height: var(--textarea-content-height, 80px);
                 box-sizing: border-box;
@@ -111,7 +115,6 @@ class PlTextArea extends PlElement {
                 height: 100%;
                 border: 1px solid var(--grey-light);
 				border-radius: 4px;
-                padding: 0 var(--space-sm);
                 background: var(--background-color);
 			}
 
@@ -142,14 +145,9 @@ class PlTextArea extends PlElement {
             <pl-labeled-container variant$="[[variant]]" label="[[label]]">
                 <slot name="label-prefix" slot="label-prefix"></slot>
                 <div class="input-container">
-                    <textarea
-                        value="{{value}}"
-                        placeholder="[[placeholder]]"
-                        title="[[value]]"
-                        tabindex$="[[_getTabIndex(disabled)]]"
-                        on-focus="[[_onFocus]]"
-                        on-input="[[_onInput]]">
-                    </textarea>
+                    <textarea value="{{value}}" placeholder="[[placeholder]]" title="[[value]]" title="[[_getTitle(value, title)]]"
+                        tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
+                                </textarea>
                 </div>
                 <slot name="label-suffix" slot="label-suffix"></slot>
             </pl-labeled-container>
@@ -195,6 +193,10 @@ class PlTextArea extends PlElement {
 
     _getTabIndex(disabled) {
         return disabled ? -1 : 0;
+    }
+
+    _getTitle(value, title) {
+        return title || value;
     }
 }
 
