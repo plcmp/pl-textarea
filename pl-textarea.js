@@ -9,7 +9,7 @@ class PlTextArea extends PlElement {
             label: { type: String },
             variant: { type: String },
             value: { type: String, value: '', observer: '_valueObserver' },
-            title: { type: String },
+            title: { type: String, value: undefined },
             placeholder: { type: String, value: '' },
             required: { type: Boolean },
             invalid: { type: Boolean },
@@ -145,7 +145,7 @@ class PlTextArea extends PlElement {
             <pl-labeled-container variant$="[[variant]]" label="[[label]]">
                 <slot name="label-prefix" slot="label-prefix"></slot>
                 <div class="input-container">
-                    <textarea value="{{value}}" placeholder="[[placeholder]]" title="[[value]]" title="[[_getTitle(value, title)]]"
+                    <textarea value="{{value}}" placeholder="[[placeholder]]" title="[[_getTitle(value, title)]]"
                         tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
                                 </textarea>
                 </div>
@@ -196,7 +196,11 @@ class PlTextArea extends PlElement {
     }
 
     _getTitle(value, title) {
-        return title || value;
+        if(title != undefined) {
+            return title;
+        } else {
+            return value;
+        }
     }
 }
 
