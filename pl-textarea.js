@@ -145,7 +145,7 @@ class PlTextArea extends PlElement {
             <pl-labeled-container variant$="[[variant]]" label="[[label]]">
                 <slot name="label-prefix" slot="label-prefix"></slot>
                 <div class="input-container">
-                    <textarea value="{{value}}" placeholder="[[placeholder]]" title="[[_getTitle(value, title)]]"
+                    <textarea value="{{fixText(value)}}" placeholder="[[placeholder]]" title="[[_getTitle(value, title)]]"
                         tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
                                 </textarea>
                 </div>
@@ -160,6 +160,12 @@ class PlTextArea extends PlElement {
         this._inputContainer = this.root.querySelector('.input-container');
         this.validate();
     }
+    
+    fixText(t) {
+        if (t === undefined || t === null) return '';
+        return t;
+    }
+
 
     _valueObserver(value) {
         this.validate();
