@@ -145,7 +145,7 @@ class PlTextArea extends PlElement {
             <pl-labeled-container variant$="[[variant]]" label="[[label]]">
                 <slot name="label-prefix" slot="label-prefix"></slot>
                 <div class="input-container">
-                    <textarea value="{{fixText(value)}}" placeholder="[[placeholder]]" title="[[_getTitle(value, title)]]"
+                    <textarea value="{{fixText(value)}}" placeholder="[[placeholder]]" title="[[title]]"
                         tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
                                 </textarea>
                 </div>
@@ -199,14 +199,6 @@ class PlTextArea extends PlElement {
 
     _getTabIndex(disabled) {
         return disabled ? -1 : 0;
-    }
-
-    _getTitle(value, title) {
-        if(title != undefined) {
-            return title;
-        } else {
-            return value;
-        }
     }
 }
 
