@@ -8,11 +8,13 @@ class PlTextArea extends PlElement {
         return {
             label: { type: String },
             variant: { type: String },
+            orientation: { type: String },
             value: { type: String, value: '', observer: '_valueObserver' },
             title: { type: String, value: undefined },
             placeholder: { type: String, value: '' },
             required: { type: Boolean },
             invalid: { type: Boolean },
+            readonly: { type: Boolean },
             disabled: { type: Boolean, reflectToAttribute: true },
             fit: { type: Boolean, value: false, reflectToAttribute: true },
             stretch: { type: Boolean, value: false, reflectToAttribute: true },
@@ -142,12 +144,12 @@ class PlTextArea extends PlElement {
 
     static get template() {
         return html`
-            <pl-labeled-container variant$="[[variant]]" label="[[label]]">
+            <pl-labeled-container orientation="[[orientation]]" label="[[label]]">
                 <slot name="label-prefix" slot="label-prefix"></slot>
-                <div class="input-container">
-                    <textarea value="{{fixText(value)}}" placeholder="[[placeholder]]" title="[[title]]"
-                        tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
-                                </textarea>
+                <div class="input-container" id="container">
+                    <textarea id="nativeTextArea" readonly$="[[readonly]]" value="{{fixText(value)}}" placeholder="[[placeholder]]"
+                        title="[[title]]" tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
+                                                        </textarea>
                 </div>
                 <slot name="label-suffix" slot="label-suffix"></slot>
             </pl-labeled-container>
@@ -156,11 +158,16 @@ class PlTextArea extends PlElement {
 
     connectedCallback() {
         super.connectedCallback();
-        this._nativeTextArea = this.root.querySelector('textarea');
-        this._inputContainer = this.root.querySelector('.input-container');
+        this._nativeTextArea = this.$.nativeTextArea;
+        this._inputContainer = this.$.container;
+
+        if (this.variant) {
+            console.log('Variant is deprecated, use orientation instead');
+            this.orientation = this.variant;
+        }
         this.validate();
     }
-    
+
     fixText(t) {
         if (t === undefined || t === null) return '';
         return t;
