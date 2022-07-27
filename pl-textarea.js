@@ -4,157 +4,151 @@ import { debounce } from "@plcmp/utils";
 import "@plcmp/pl-labeled-container";
 
 class PlTextArea extends PlElement {
-    static get properties() {
-        return {
-            label: { type: String },
-            variant: { type: String },
-            orientation: { type: String },
-            value: { type: String, value: '', observer: '_valueObserver' },
-            title: { type: String, value: undefined },
-            placeholder: { type: String, value: '' },
-            required: { type: Boolean },
-            invalid: { type: Boolean },
-            readonly: { type: Boolean },
-            disabled: { type: Boolean, reflectToAttribute: true },
-            fit: { type: Boolean, value: false, reflectToAttribute: true },
-            stretch: { type: Boolean, value: false, reflectToAttribute: true },
-            grow: { type: Boolean, value: false },
-            hideResizer: { type: Boolean, value: false, reflectToAttribute: true }
-        };
-    }
+    static  properties = {
+        label: { type: String },
+        variant: { type: String },
+        orientation: { type: String },
+        value: { type: String, value: '', observer: '_valueObserver' },
+        title: { type: String, value: undefined },
+        placeholder: { type: String, value: '' },
+        required: { type: Boolean },
+        invalid: { type: Boolean },
+        readonly: { type: Boolean },
+        disabled: { type: Boolean, reflectToAttribute: true },
+        fit: { type: Boolean, value: false, reflectToAttribute: true },
+        stretch: { type: Boolean, value: false, reflectToAttribute: true },
+        grow: { type: Boolean, value: false },
+        hideResizer: { type: Boolean, value: false, reflectToAttribute: true }
+    };
 
-    static get css() {
-        return css`
-            :host {
-                display: flex;
-                outline: none;
-                width: var(--content-width);
-            }
+    static css = css`
+        :host {
+            display: flex;
+            outline: none;
+            width: var(--content-width);
+        }
 
-            pl-labeled-container {
-                width: inherit;
-                height: inherit;
-                position: relative;
-            }
+        pl-labeled-container {
+            width: inherit;
+            height: inherit;
+            position: relative;
+        }
 
-            :host([fit]) {
-                width: 100%;
-                height: 100%;
-            }
+        :host([fit]) {
+            width: 100%;
+            height: 100%;
+        }
 
-            :host([stretch]) {
-                --content-width: 100%;
-                --textarea-content-width: 100%;
-            }
+        :host([stretch]) {
+            --content-width: 100%;
+            --textarea-content-width: 100%;
+        }
 
-            :host([fit])  {
-                --content-width: 100%;
-                --content-height: 100%;
+        :host([fit])  {
+            --content-width: 100%;
+            --content-height: 100%;
 
-                --textarea-content-width: 100%;
-                --textarea-content-height: 100%;
-            }
+            --textarea-content-width: 100%;
+            --textarea-content-height: 100%;
+        }
 
-            :host([hide-resizer]) textarea {
-                resize: none;
-            }
+        :host([hide-resizer]) textarea {
+            resize: none;
+        }
 
-            :host([disabled]) {
-                color: var(--grey-base);
-                cursor: not-allowed;
-                pointer-events: none;
-				user-select: none;
-            }
+        :host([disabled]) {
+            color: var(--grey-base);
+            cursor: not-allowed;
+            pointer-events: none;
+            user-select: none;
+        }
 
-            :host([disabled]) .input-container,
-			:host([disabled]) ::placeholder {
-				color: var(--grey-base);
-                background: var(--grey-lightest);
-            }
+        :host([disabled]) .input-container,
+        :host([disabled]) ::placeholder {
+            color: var(--grey-base);
+            background: var(--grey-lightest);
+        }
 
-            :host(:hover) .input-container{
-                border: 1px solid var(--grey-dark);
-			}
+        :host(:hover) .input-container{
+            border: 1px solid var(--grey-dark);
+        }
 
-            :host(:active) .input-container{
-                border: 1px solid var(--primary-base);
-			}
+        :host(:active) .input-container{
+            border: 1px solid var(--primary-base);
+        }
 
-			.input-container:focus-within{
-                border: 1px solid var(--primary-base) !important;
-			}
+        .input-container:focus-within{
+            border: 1px solid var(--primary-base) !important;
+        }
 
-			:host([invalid]) .input-container{
-				border: 1px solid var(--negative-base) !important;
-			}
+        :host([invalid]) .input-container{
+            border: 1px solid var(--negative-base) !important;
+        }
 
-			textarea {
-                outline:none;
-                padding-block-start: var(--space-xs);
-                padding-inline-end: var(--space-sm);
-                padding-block-end: 0;
-                padding-inline-start: var(--space-sm);
-				width: var(--textarea-content-width, 200px);
-				height: var(--textarea-content-height, 80px);
-                box-sizing: border-box;
-                font: var(--text-font);
-                color: var(--text-color);
-                border: none;
-                min-height: 48px;
-                min-width: var(--content-width);
-			}
+        textarea {
+            outline:none;
+            padding-block-start: var(--space-xs);
+            padding-inline-end: var(--space-sm);
+            padding-block-end: 0;
+            padding-inline-start: var(--space-sm);
+            width: var(--textarea-content-width, 200px);
+            height: var(--textarea-content-height, 80px);
+            box-sizing: border-box;
+            font: var(--text-font);
+            color: var(--text-color);
+            border: none;
+            min-height: 48px;
+            min-width: var(--content-width);
+        }
 
-			.input-container {
-                display: flex;
-                flex-direction: row;
-                box-sizing: border-box;
-				overflow: hidden;
-                position: relative;
-                box-sizing: border-box;
-                border: none;
-                border-radius: var(--border-radius);
-                width: 100%;
-                height: 100%;
-                border: 1px solid var(--grey-light);
-				border-radius: 4px;
-                background: var(--background-color);
-			}
+        .input-container {
+            display: flex;
+            flex-direction: row;
+            box-sizing: border-box;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+            border: none;
+            border-radius: var(--border-radius);
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--grey-light);
+            border-radius: 4px;
+            background: var(--background-color);
+        }
 
-            .input-container::before {
-                content: '';
-                display: block;
-                position: absolute;
-                box-sizing: border-box;
-                inset-block-start: 0;
-                inset-inline-start: 0;
-            }
+        .input-container::before {
+            content: '';
+            display: block;
+            position: absolute;
+            box-sizing: border-box;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+        }
 
-            .input-container.required::before {
-				border-block-start: calc(var(--space-md) / 2) solid var(--attention);
-				border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
-				border-inline-end: calc(var(--space-md) / 2) solid transparent;
-				border-block-end: calc(var(--space-md) / 2) solid transparent;
-            }
+        .input-container.required::before {
+            border-block-start: calc(var(--space-md) / 2) solid var(--attention);
+            border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
+            border-inline-end: calc(var(--space-md) / 2) solid transparent;
+            border-block-end: calc(var(--space-md) / 2) solid transparent;
+        }
 
-			::placeholder {
-				color: var(--grey-dark);
-			}
-    	`;
-    }
+        ::placeholder {
+            color: var(--grey-dark);
+        }
+    `;
 
-    static get template() {
-        return html`
-            <pl-labeled-container orientation="[[orientation]]" label="[[label]]">
-                <slot name="label-prefix" slot="label-prefix"></slot>
-                <div class="input-container" id="container">
-                    <textarea id="nativeTextArea" readonly$="[[readonly]]" value="{{fixText(value)}}" placeholder="[[placeholder]]"
-                        title="[[title]]" tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
-                                                        </textarea>
-                </div>
-                <slot name="label-suffix" slot="label-suffix"></slot>
-            </pl-labeled-container>
-		`;
-    }
+    static template = html`
+        <pl-labeled-container orientation="[[orientation]]" label="[[label]]">
+            <slot name="label-prefix" slot="label-prefix"></slot>
+            <div class="input-container" id="container">
+                <textarea id="nativeTextArea" readonly$="[[readonly]]" value="{{fixText(value)}}" placeholder="[[placeholder]]"
+                    title="[[title]]" tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
+                                                    </textarea>
+            </div>
+            <slot name="label-suffix" slot="label-suffix"></slot>
+        </pl-labeled-container>
+    `;
 
     connectedCallback() {
         super.connectedCallback();
