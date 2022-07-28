@@ -63,9 +63,17 @@ class PlTextArea extends PlElement {
             user-select: none;
         }
 
+        :host([disabled]) {
+            cursor: not-allowed;
+            pointer-events: none;
+            user-select: none;
+        }
+
         :host([disabled]) .input-container,
+        :host([disabled]) .input-container input,
+        :host([disabled]) ::slotted(*),
         :host([disabled]) ::placeholder {
-            color: var(--grey-base);
+            color: var(--grey-darkest);
             background: var(--grey-lightest);
         }
 
@@ -99,6 +107,7 @@ class PlTextArea extends PlElement {
             border: none;
             min-height: 48px;
             min-width: var(--content-width);
+            background: transparent;
         }
 
         .input-container {
@@ -112,7 +121,7 @@ class PlTextArea extends PlElement {
             border-radius: var(--border-radius);
             width: 100%;
             height: 100%;
-            border: 1px solid var(--grey-light);
+            border: 1px solid var(--grey-base);
             border-radius: 4px;
             background: var(--background-color);
         }
