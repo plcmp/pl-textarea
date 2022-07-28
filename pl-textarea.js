@@ -102,12 +102,12 @@ class PlTextArea extends PlElement {
             width: var(--textarea-content-width, 200px);
             height: var(--textarea-content-height, 80px);
             box-sizing: border-box;
-            font: var(--text-font);
-            color: var(--text-color);
             border: none;
             min-height: 48px;
             min-width: var(--content-width);
             background: transparent;
+            color: inherit;
+            font: inherit;
         }
 
         .input-container {
@@ -124,6 +124,8 @@ class PlTextArea extends PlElement {
             border: 1px solid var(--grey-base);
             border-radius: 4px;
             background: var(--background-color);
+            font: var(--text-font);
+            color: var(--text-color);
         }
 
         .input-container::before {
