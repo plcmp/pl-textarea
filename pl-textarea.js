@@ -4,17 +4,18 @@ import { debounce } from "@plcmp/utils";
 import "@plcmp/pl-labeled-container";
 
 class PlTextArea extends PlElement {
-    static  properties = {
+    static properties = {
         label: { type: String },
         variant: { type: String },
         orientation: { type: String },
         value: { type: String, value: '', observer: '_valueObserver' },
         title: { type: String, value: undefined },
         placeholder: { type: String, value: '' },
-        required: { type: Boolean },
+        required: { type: Boolean, observer: '_requiredObserver' },
         invalid: { type: Boolean },
-        readonly: { type: Boolean },
-        disabled: { type: Boolean, reflectToAttribute: true },
+        hidden: { type: Boolean, reflectToAttribute: true },
+        readonly: { type: Boolean, observer: '_readonlyObserver' },
+        disabled: { type: Boolean, reflectToAttribute: true, observer: '_disabledObserver' },
         fit: { type: Boolean, value: false, reflectToAttribute: true },
         stretch: { type: Boolean, value: false, reflectToAttribute: true },
         grow: { type: Boolean, value: false },
@@ -26,6 +27,10 @@ class PlTextArea extends PlElement {
             display: flex;
             outline: none;
             width: var(--content-width);
+        }
+
+        :host([hidden]) {
+            display: none;
         }
 
         pl-labeled-container {
@@ -58,12 +63,6 @@ class PlTextArea extends PlElement {
 
         :host([disabled]) {
             color: var(--grey-base);
-            cursor: not-allowed;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        :host([disabled]) {
             cursor: not-allowed;
             pointer-events: none;
             user-select: none;
@@ -154,8 +153,7 @@ class PlTextArea extends PlElement {
             <slot name="label-prefix" slot="label-prefix"></slot>
             <div class="input-container" id="container">
                 <textarea id="nativeTextArea" readonly$="[[readonly]]" value="{{fixText(value)}}" placeholder="[[placeholder]]"
-                    title="[[title]]" tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
-                                                    </textarea>
+                    title="[[title]]" tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]"></textarea>
             </div>
             <slot name="label-suffix" slot="label-suffix"></slot>
         </pl-labeled-container>
@@ -163,13 +161,23 @@ class PlTextArea extends PlElement {
 
     connectedCallback() {
         super.connectedCallback();
-        this._nativeTextArea = this.$.nativeTextArea;
-        this._inputContainer = this.$.container;
 
         if (this.variant) {
             console.log('Variant is deprecated, use orientation instead');
             this.orientation = this.variant;
         }
+        this.validate();
+    }
+    
+    _disabledObserver(){
+        this.validate();
+    }
+
+    _requiredObserver() {
+        this.validate();
+    }
+
+    _readonlyObserver() {
         this.validate();
     }
 
@@ -178,35 +186,33 @@ class PlTextArea extends PlElement {
         return t;
     }
 
-
     _valueObserver(value) {
         this.validate();
     }
 
     _onInput() {
         let debouncer = debounce(() => {
-            this.value = this._nativeTextArea.value;
+            this.value = this.$.nativeTextArea.value;
         }, 100)
 
         debouncer();
     }
 
     validate() {
-        if (this.required) {
-            if ((this.value == null || this.value === undefined || this.value == '')) {
-                this._inputContainer.classList.add('required');
-                this.invalid = true;
-            } else {
-                this._inputContainer.classList.remove('required');
-                this.invalid = false;
-            }
+        if (this.required && (this.value == null || this.value === undefined || this.value == '') && !this.disabled && !this.readonly) {
+            this.$.container.classList.add('required');
+            this.invalid = true;
+        }
+        else {
+            this.$.container.classList.remove('required');
+            this.invalid = false;
         }
         this.dispatchEvent(new CustomEvent('validation-changed', { bubbles: true, composed: true }))
     }
 
     _onFocus(event) {
         var length = this.value?.toString().length || 0;
-        this._nativeTextArea.setSelectionRange(length, length);
+        this.$.nativeTextArea.setSelectionRange(length, length);
     }
 
     _getTabIndex(disabled) {
