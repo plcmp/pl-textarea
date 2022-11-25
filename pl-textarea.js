@@ -6,7 +6,6 @@ import "@plcmp/pl-labeled-container";
 class PlTextArea extends PlElement {
     static properties = {
         label: { type: String },
-        variant: { type: String },
         orientation: { type: String },
         value: { type: String, value: '', observer: '_valueObserver' },
         title: { type: String, value: undefined },
@@ -161,11 +160,6 @@ class PlTextArea extends PlElement {
 
     connectedCallback() {
         super.connectedCallback();
-
-        if (this.variant) {
-            console.log('Variant is deprecated, use orientation instead');
-            this.orientation = this.variant;
-        }
         this.validate();
     }
     
