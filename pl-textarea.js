@@ -60,26 +60,20 @@ class PlTextArea extends PlElement {
             resize: none;
         }
 
-        :host([disabled]) {
-            color: var(--grey-base);
-            cursor: not-allowed;
-            pointer-events: none;
-            user-select: none;
-        }
-
         :host([disabled]) .input-container,
-        :host([disabled]) .input-container input,
-        :host([disabled]) ::slotted(*),
+        :host([disabled]) .input-container textarea,
         :host([disabled]) ::placeholder {
             color: var(--grey-darkest);
             background: var(--grey-lightest);
+            cursor: not-allowed;
+            user-select: none;
         }
 
-        :host(:hover) .input-container{
-            border: 1px solid var(--grey-dark);
+        :host([:not(disabled)]:hover) .input-container {
+            border: 1px solid var(--primary-dark);
         }
 
-        :host(:active) .input-container{
+        :host([:not(disabled)]:active) .input-container {
             border: 1px solid var(--primary-base);
         }
 
@@ -151,8 +145,8 @@ class PlTextArea extends PlElement {
         <pl-labeled-container orientation="[[orientation]]" label="[[label]]">
             <slot name="label-prefix" slot="label-prefix"></slot>
             <div class="input-container" id="container">
-                <textarea id="nativeTextArea" readonly$="[[readonly]]" value="{{fixText(value)}}" placeholder="[[placeholder]]"
-                    title="[[title]]" tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]"></textarea>
+                <textarea id="nativeTextArea" disabled$="[[_toBool(disabled)]]" readonly$="[[_toBool(readonly)]]" value="{{fixText(value)}}" placeholder="[[placeholder]]"
+                    title="[[fixText(title)]]" tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]"></textarea>
             </div>
             <slot name="label-suffix" slot="label-suffix"></slot>
         </pl-labeled-container>
@@ -178,6 +172,10 @@ class PlTextArea extends PlElement {
     fixText(t) {
         if (t === undefined || t === null) return '';
         return t;
+    }
+
+    _toBool(val) {
+        return !!val;
     }
 
     _valueObserver(value) {
