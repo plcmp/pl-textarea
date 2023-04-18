@@ -25,27 +25,17 @@ class PlTextArea extends PlElement {
         :host {
             display: flex;
             outline: none;
-            width: var(--content-width);
         }
 
         :host([hidden]) {
             display: none;
         }
 
-        pl-labeled-container {
-            width: inherit;
-            height: inherit;
-            position: relative;
-        }
-
-        :host([fit]) {
-            width: 100%;
-            height: 100%;
-        }
-
         :host([stretch]) {
             --content-width: 100%;
             --textarea-content-width: 100%;
+            width: 100%;
+            flex-shrink: 1;
         }
 
         :host([fit])  {
@@ -54,6 +44,12 @@ class PlTextArea extends PlElement {
 
             --textarea-content-width: 100%;
             --textarea-content-height: 100%;
+
+            height: 100%;
+            width: 100%;
+            
+            min-width: 0;
+            max-width: 100%;
         }
 
         :host([hide-resizer]) textarea {
