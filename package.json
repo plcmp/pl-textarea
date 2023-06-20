@@ -1,6 +1,6 @@
 {
     "name": "@plcmp/pl-textarea",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "description": "Simple textarea component.",
     "main": "pl-textarea.js",
     "repository": {
