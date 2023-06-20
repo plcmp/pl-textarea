@@ -77,8 +77,16 @@ class PlTextArea extends PlElement {
             border: 1px solid var(--primary-base) !important;
         }
 
-        :host([invalid]) .input-container{
-            border: 1px solid var(--negative-base) !important;
+        .input-container.invalid {
+            border: 1px solid var(--negative-base);
+        }
+
+        .input-container.invalid:focus-within {
+            border: 1px solid var(--negative-base);
+        }
+
+        .input-container.required.invalid {
+            border: 1px solid var(--grey-base);
         }
 
         textarea {
@@ -140,7 +148,7 @@ class PlTextArea extends PlElement {
     static template = html`
         <pl-labeled-container orientation="[[orientation]]" label="[[label]]">
             <slot name="label-prefix" slot="label-prefix"></slot>
-            <div class="input-container" id="container">
+            <div class="input-container" id="inputContainer">
                 <textarea id="nativeTextArea" disabled$="[[_toBool(disabled)]]" readonly$="[[_toBool(readonly)]]" value="{{fixText(value)}}" placeholder="[[placeholder]]"
                     title="[[fixText(title)]]" tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]"></textarea>
             </div>
@@ -150,6 +158,9 @@ class PlTextArea extends PlElement {
 
     connectedCallback() {
         super.connectedCallback();
+        this.validators = [];
+        this._validationResults = [];
+        this.validators.push(this.defaultValidators.bind(this));
         this.validate();
     }
     
@@ -186,15 +197,33 @@ class PlTextArea extends PlElement {
         debouncer();
     }
 
-    validate() {
-        if (this.required && (this.value == null || this.value === undefined || this.value == '') && !this.disabled && !this.readonly) {
-            this.$.container.classList.add('required');
-            this.invalid = true;
+    defaultValidators(value) {
+        let messages = [];
+
+        if ((value === '' || value === null || value === undefined) && this.required) {
+            messages.push('Значение не может быть пустым');
         }
-        else {
-            this.$.container.classList.remove('required');
-            this.invalid = false;
+
+        return messages.length > 0 ? messages.join(';') : undefined;
+    }
+
+    async validate() {
+        const result = await Promise.all(this.validators.map(x => x(this.value)));
+        this._validationResults = result.filter(x => x);
+
+        this.invalid = this._validationResults.length > 0 && !this.disabled
+        if (this.invalid && this._validationResults.find(x => x.includes('Значение не может быть пустым'))) {
+            this.$.inputContainer.classList.add('required');
+        } else {
+            this.$.inputContainer.classList.remove('required');
         }
+
+        if (this.invalid) {
+            this.$.inputContainer.classList.add('invalid');
+        } else {
+            this.$.inputContainer.classList.remove('invalid');
+        }
+
         this.dispatchEvent(new CustomEvent('validation-changed', { bubbles: true, composed: true }))
     }
 
