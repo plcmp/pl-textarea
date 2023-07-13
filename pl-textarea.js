@@ -189,13 +189,9 @@ class PlTextArea extends PlElement {
         this.validate();
     }
 
-    _onInput() {
-        let debouncer = debounce(() => {
-            this.value = this.$.nativeTextArea.value;
-        }, 100)
-
-        debouncer();
-    }
+    _onInput= debounce(() => {
+        this.value = this.$.nativeTextArea.value;
+    }, 100);
 
     defaultValidators(value) {
         let messages = [];
