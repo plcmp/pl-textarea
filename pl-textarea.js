@@ -32,18 +32,18 @@ class PlTextArea extends PlElement {
         }
 
         :host([stretch]) {
-            --content-width: 100%;
-            --textarea-content-width: 100%;
+            --pl-content-width: 100%;
+            --pl-textarea-content-width: 100%;
             width: 100%;
             flex-shrink: 1;
         }
 
         :host([fit])  {
-            --content-width: 100%;
-            --content-height: 100%;
+            --pl-content-width: 100%;
+            --pl-content-height: 100%;
 
-            --textarea-content-width: 100%;
-            --textarea-content-height: 100%;
+            --pl-textarea-content-width: 100%;
+            --pl-textarea-content-height: 100%;
 
             height: 100%;
             width: 100%;
@@ -59,48 +59,48 @@ class PlTextArea extends PlElement {
         :host([disabled]) .input-container,
         :host([disabled]) .input-container textarea,
         :host([disabled]) ::placeholder {
-            color: var(--grey-darkest);
-            background: var(--grey-lightest);
+            color: var(--pl-grey-darkest);
+            background: var(--pl-grey-lightest);
             cursor: not-allowed;
             user-select: none;
         }
 
         :host([:not(disabled)]:hover) .input-container {
-            border: 1px solid var(--primary-dark);
+            border: 1px solid var(--pl-primary-dark);
         }
 
         :host([:not(disabled)]:active) .input-container {
-            border: 1px solid var(--primary-base);
+            border: 1px solid var(--pl-primary-base);
         }
 
         .input-container:focus-within{
-            border: 1px solid var(--primary-base) !important;
+            border: 1px solid var(--pl-primary-base) !important;
         }
 
         .input-container.invalid {
-            border: 1px solid var(--negative-base);
+            border: 1px solid var(--pl-negative-base);
         }
 
         .input-container.invalid:focus-within {
-            border: 1px solid var(--negative-base);
+            border: 1px solid var(--pl-negative-base);
         }
 
         .input-container.required.invalid {
-            border: 1px solid var(--grey-base);
+            border: 1px solid var(--pl-grey-base);
         }
 
         textarea {
             outline:none;
-            padding-block-start: var(--space-xs);
-            padding-inline-end: var(--space-sm);
+            padding-block-start: var(--pl-space-xs);
+            padding-inline-end: var(--pl-space-xs);
             padding-block-end: 0;
-            padding-inline-start: var(--space-sm);
-            width: var(--textarea-content-width, 200px);
-            height: var(--textarea-content-height, 80px);
+            padding-inline-start: var(--pl-space-xs);
+            width: var(--pl-textarea-content-width, 200px);
+            height: var(--pl-textarea-content-height, 80px);
             box-sizing: border-box;
             border: none;
-            min-height: 48px;
-            min-width: var(--content-width);
+            min-height: calc(var(--pl-base-size) * 2);
+            min-width: var(--pl-content-width);
             background: transparent;
             color: inherit;
             font: inherit;
@@ -114,14 +114,14 @@ class PlTextArea extends PlElement {
             position: relative;
             box-sizing: border-box;
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: var(--pl-border-radius);
             width: 100%;
             height: 100%;
-            border: 1px solid var(--grey-base);
-            border-radius: 4px;
-            background: var(--background-color);
-            font: var(--text-font);
-            color: var(--text-color);
+            border: 1px solid var(--pl-grey-base);
+            border-radius: var(--pl-border-radius);
+            background: var(--pl-background-color);
+            font: var(--pl-text-font);
+            color: var(--pl-text-color);
         }
 
         .input-container::before {
@@ -134,14 +134,14 @@ class PlTextArea extends PlElement {
         }
 
         .input-container.required::before {
-            border-block-start: calc(var(--space-md) / 2) solid var(--attention);
-            border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
-            border-inline-end: calc(var(--space-md) / 2) solid transparent;
-            border-block-end: calc(var(--space-md) / 2) solid transparent;
+			border-block-start: calc(var(--pl-space-md) / 2) solid var(--pl-attention);
+			border-inline-start: calc(var(--pl-space-md) / 2)  solid var(--pl-attention);
+			border-inline-end: calc(var(--pl-space-md) / 2) solid transparent;
+			border-block-end: calc(var(--pl-space-md) / 2) solid transparent;
         }
 
         ::placeholder {
-            color: var(--grey-dark);
+            color: var(--pl-grey-dark);
         }
     `;
 
